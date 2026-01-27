@@ -1,0 +1,68 @@
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser , BaseUserManager 
+from auth_api.libs.db.models import BasicUserModel
+from django.utils.translation import gettext_lazy as _
+# Create your models here.
+
+class CustomeUserManager(BaseUserManager) : 
+    def _create_user(self ,username , email , password = None  , **extra_fields) :
+        
+        if not email :
+            raise ValueError("EMAIL NOT FOUND !")
+        if not username  :
+            raise ValueError("USERNAME NOT FOUND !")
+        
+        email = self.normalize_email(email=email)
+        username = self.model.normalize_username(username=username)
+        user = self.model( email = email , username = username,**extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self , email  , username  , password = None  , **extra_fields) : 
+        extra_fields.setdefault("is_staff" , True)
+        extra_fields.setdefault("is_superuser" , True)
+        return self._create_user(username = username , email=email , password=password , **extra_fields)
+    
+    def create_admin(self, email, username, password = None, password2 = None,**extra_fields) :
+        extra_fields.setdefault("is_admin" , True)
+        return self._create_user(username=username , email=email, password=password, **extra_fields)
+
+
+
+class BaseCustomUser(AbstractBaseUser , BasicUserModel ) : 
+   
+    email       = models.EmailField( blank=True  ,  unique=True , null= False )
+    username    = models.CharField(max_length=100 , blank= True , null= True , unique= True)
+
+
+    # fk default_snf or default hospitals
+    # fk hospitals 
+
+    is_admin        = models.BooleanField(default=False) 
+    is_staff        = models.BooleanField(default=False) # It Allows To Login To Django Admin(Even Can Login But is_superuser== False)=>Cant Do anything
+    is_superuser    = models.BooleanField(default=False) # It Allow To Has permission(Cant log in to django admin if is_staff== False)
+    is_active       = models.BooleanField(default=True)
+
+    
+    USERNAME_FIELD = "email" 
+    REQUIRED_FIELDS = ["username"]
+
+    objects         = CustomeUserManager()
+
+    class Meta :
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+    def __str__(self):
+
+        return  self.last_name
+    @property
+    def full_name(self) : 
+        return self.first_name + " " +self.last_name
+
+    # Bayad Bebinam k ina chikar mikonn Hatman : !
+    def has_perm(self, perm, obj=None): # todo?
+        return self.is_superuser 
+
+    def has_module_perms(self, app_label): # todo?
+        return self.is_superuser and self.is_staff
