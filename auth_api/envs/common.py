@@ -148,8 +148,8 @@ CORS_ALLOWED_ORIGINS = [
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # for still logged in 
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5), # for still logged in 
     'ROTATE_REFRESH_TOKENS': False, # agar roye true set shavad payeeni ham bayad True set beshe
     'BLACKLIST_AFTER_ROTATION': False, # va baraye inke ishon ro True bokonim bayad yek seri tanzimat dige ham anjam bedim : 
 # and it add to INSTALLED APPS :     
