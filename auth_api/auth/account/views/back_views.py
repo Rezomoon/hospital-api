@@ -1,7 +1,7 @@
 from rest_framework.response import Response 
 from rest_framework import status
 from rest_framework.views import APIView
-from auth_api.auth.account.serializers.back_serializers import AdminRegistrationSerializer , LoginSerailizer , BasicUserSerailizer
+from auth_api.auth.account.serializers.user_serializers import AdminRegistrationSerializer , LoginSerailizer , BasicUserSerailizer
 from django.contrib.auth import authenticate
 from auth_api.auth.account.renderers import CustomRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
