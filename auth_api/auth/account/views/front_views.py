@@ -14,7 +14,7 @@ class UserProfile(APIView) :
             "data" : serializer.data
         } , status=status.HTTP_200_OK)
     
-    def post(self , request) : 
+    def put(self , request) : 
         user        =  request.user   
         data        = request.data
         if data.get("password") :
@@ -26,4 +26,3 @@ class UserProfile(APIView) :
         serializer.save()   
         serializer = ProfileSerializers(user)
         return Response(serializer.data , status=status.HTTP_202_ACCEPTED)
-
