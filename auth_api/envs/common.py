@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework" ,
     "rest_framework_simplejwt" , 
     "corsheaders" ,
+    "rest_framework_simplejwt.token_blacklist" ,
 
 
     # apps : 
@@ -181,3 +183,12 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "account.BaseCustomUser"
+PASSWORD_RESET_TIMEOUT = 300
+
+# Email Config : 
+EMAIL_BACKEND   = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST      = "smtp.gmail.com"
+EMAIL_USE_TLS   = True
+EMAIL_PORT      = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_USER")
+EMAIL_PASSWORD_USER = os.environ.get("EMAIL_PASSWORD")
