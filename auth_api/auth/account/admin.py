@@ -58,7 +58,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
         ("اطلاعات سیستمی", 
          {
             "classes"       : ("collapse" ,) ,
-            "fields" :("last_login", ) , 
+            "fields" :("last_login", "person_code") , 
             }
              )
         
@@ -91,7 +91,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
          ),
     )
 
-    list_display = ("id", "username", "email",  "full_name", "is_staff", "is_admin", )
+    list_display = ("id", "username", "email",  "full_name", "is_staff", "is_admin","person_code" )
     list_filter = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
     search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("username","is_superuser")

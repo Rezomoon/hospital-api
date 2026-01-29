@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-
 # Create Your Abstract Model : 
 
 
@@ -14,8 +13,8 @@ class BasicUserModel(models.Model) :
     weight          = models.PositiveIntegerField(null= True , blank= True)
     height          = models.PositiveIntegerField(null= True , blank= True)
     
-
-    person_code     = models.CharField(max_length=6) # todo?
+    
+    person_code     = models.CharField(max_length=6 , unique=True , editable=False ) # todo? default=person_code()
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =

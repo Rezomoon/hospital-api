@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager 
 from auth_api.libs.db.models import BasicUserModel
 from django.utils.translation import gettext_lazy as _
+import string
+import random
+from django.db import IntegrityError
 # Create your models here.
 
 class CustomeUserManager(BaseUserManager) : 
@@ -11,12 +14,20 @@ class CustomeUserManager(BaseUserManager) :
             raise ValueError("EMAIL NOT FOUND !")
         if not username  :
             raise ValueError("USERNAME NOT FOUND !")
+        if not extra_fields.get("person_code") : 
+            extra_fields["person_code"]  = self._generate_unique_person_code()
+
         
         email = self.normalize_email(email=email)
         username = self.model.normalize_username(username=username)
         user = self.model( email = email , username = username,**extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        try : 
+            user.save(using=self._db)
+        except IntegrityError : 
+            extra_fields["person_code"] = self._generate_unique_person_code()
+            user.person_code = extra_fields["person_code"]
+            user.save(using=self._db)
         return user
 
     def create_superuser(self , email  , username  , password = None  , **extra_fields) : 
@@ -27,14 +38,17 @@ class CustomeUserManager(BaseUserManager) :
     def create_admin(self, email, username, password = None, password2 = None,**extra_fields) :
         extra_fields.setdefault("is_admin" , True)
         return self._create_user(username=username , email=email, password=password, **extra_fields)
-
+    def _generate_unique_person_code (self,) : 
+        while True : 
+            code = "".join(random.choices(string.digits, k =6)) 
+            if not self.model.objects.filter(person_code = code).exists() : 
+                return code
 
 
 class BaseCustomUser(AbstractBaseUser , BasicUserModel ) : 
    
     email       = models.EmailField( blank=True  ,  unique=True , null= False )
     username    = models.CharField(max_length=100 , blank= True , null= True , unique= True)
-
 
     # fk default_snf or default hospitals
     # fk hospitals 
