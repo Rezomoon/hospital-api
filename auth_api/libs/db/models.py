@@ -3,7 +3,7 @@ from django.conf import settings
 # Create Your Abstract Model : 
 
 
-class BasicUserModel(models.Model) :
+class PersonBase(models.Model) :
 
     
     first_name  = models.CharField(max_length=150 , blank=True  )
@@ -18,6 +18,8 @@ class BasicUserModel(models.Model) :
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =
+    # status = 
+    # national_id 
 
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "created" , editable=False) 
     created_at  = models.DateTimeField(auto_now_add=True , editable=False)

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager 
-from auth_api.libs.db.models import BasicUserModel
+from auth_api.libs.db.models import PersonBase
 from django.utils.translation import gettext_lazy as _
 import string
 import random
@@ -45,7 +45,7 @@ class CustomeUserManager(BaseUserManager) :
                 return code
 
 
-class BaseCustomUser(AbstractBaseUser , BasicUserModel ) : 
+class BaseCustomUser(AbstractBaseUser , PersonBase ) : 
    
     email       = models.EmailField( blank=True  ,  unique=True , null= False )
     username    = models.CharField(max_length=100 , blank= True , null= True , unique= True)
