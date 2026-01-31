@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
+from auth_api.apps.Person.models import Status , Role
 # Create Your Abstract Model : 
+
 
 
 class PersonBase(models.Model) :
@@ -18,7 +20,10 @@ class PersonBase(models.Model) :
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =
-    # status = 
+
+    status  = models.ManyToManyField(Status ,  blank=True,related_name="status" )
+    role    = models.ManyToManyField(Role , blank=True , related_name=  "role")
+
     # national_id 
 
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "created" , editable=False) 
@@ -28,3 +33,4 @@ class PersonBase(models.Model) :
 
     class Meta : 
         abstract = True
+

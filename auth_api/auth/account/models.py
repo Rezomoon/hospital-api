@@ -7,6 +7,7 @@ import random
 from django.db import IntegrityError
 # Create your models here.
 
+
 class CustomeUserManager(BaseUserManager) : 
     def _create_user(self ,username , email , password = None  , **extra_fields) :
         
@@ -80,3 +81,6 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
 
     def has_module_perms(self, app_label): # todo?
         return self.is_superuser and self.is_staff
+
+
+
