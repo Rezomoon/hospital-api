@@ -50,7 +50,9 @@ class BaseCustomUserAdminModel(UserAdmin) :
                         "is_active" , 
                         "is_staff",
                         "is_superuser",
-                        "is_admin" ,)
+                        "is_admin" ,
+                        "role" ,
+                        "status",)
                         }
         ) ,
 
@@ -58,7 +60,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
         ("اطلاعات سیستمی", 
          {
             "classes"       : ("collapse" ,) ,
-            "fields" :("last_login", "person_code") , 
+            "fields" :("last_login", ) , 
             }
              )
         
@@ -77,7 +79,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
             "دسترسی ها و نقش ها" ,
          {
              "classes"          :  ["wide",],
-             "fields"           : (("is_admin", "is_staff", "is_superuser",),) ,
+             "fields"           : (("is_admin", "is_staff", "is_superuser",),"role","status") ,
              "description"      : "تنظیمات دسترسی ها و نقش های کاربر"
          }
          ),
@@ -91,7 +93,15 @@ class BaseCustomUserAdminModel(UserAdmin) :
          ),
     )
 
-    list_display = ("id", "username", "email",  "full_name", "is_staff", "is_admin","person_code" )
+    list_display = ("id", "username", "email",  "full_name", "is_staff", "is_admin","person_code" ,"get_status", "get_role" )
+
+
+    def get_role(self , obj ) :
+        return [role.name for role in obj.role.all()]
+    get_role.short_description = "Role"
+    def get_status(self, obj) : 
+        return [status.name  for status in obj.status.all()]
+    get_status.short_description = "Status"
     list_filter = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
     search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("username","is_superuser")
