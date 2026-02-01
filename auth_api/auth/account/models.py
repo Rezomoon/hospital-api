@@ -54,6 +54,7 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     # fk default_snf or default hospitals
     # fk hospitals 
 
+    role    = models.ManyToManyField("Role" , blank=True , related_name=  "role")
     is_admin        = models.BooleanField(default=False) 
     is_staff        = models.BooleanField(default=False) # It Allows To Login To Django Admin(Even Can Login But is_superuser== False)=>Cant Do anything
     is_superuser    = models.BooleanField(default=False) # It Allow To Has permission(Cant log in to django admin if is_staff== False)
@@ -84,3 +85,8 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
 
 
 
+class Role(models.Model) : 
+    name        = models.CharField(max_length=150 , unique=True)
+    description = models.TextField( blank=True)
+    def __str__(self):
+        return self.name
