@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from auth_api.apps.Person.models import Status , Role
+from auth_api.apps.Person.models import Status 
 # Create Your Abstract Model : 
 
 
@@ -21,8 +21,8 @@ class PersonBase(models.Model) :
 
     # ImageField =
 
-    status  = models.ManyToManyField(Status ,  blank=True,related_name="status" )
-    role    = models.ManyToManyField(Role , blank=True , related_name=  "role")
+    status  = models.ForeignKey(Status ,  on_delete=models.DO_NOTHING,blank=True,related_name="status" )
+   
 
     # national_id 
 
