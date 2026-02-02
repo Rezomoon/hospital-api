@@ -6,6 +6,7 @@ import string
 import random
 from django.db import IntegrityError
 from django.conf import settings
+from auth_api.libs.constants.genders import GenderChoices
 
 # Create your models here.
 
@@ -27,6 +28,7 @@ class PersonBase(models.Model) :
     first_name  = models.CharField(max_length=150 , blank=True  )
     last_name   = models.CharField(max_length=150 , blank=True  )
     
+    gender      = models.CharField(max_length=8 ,choices=GenderChoices.choices, default=GenderChoices.Male, )
     date_of_birth   = models.DateField(null=True , blank= True)
     weight          = models.PositiveIntegerField(null= True , blank= True)
     height          = models.PositiveIntegerField(null= True , blank= True)
@@ -45,7 +47,11 @@ class PersonBase(models.Model) :
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
     created_at  = models.DateTimeField(auto_now_add=True , editable=False)
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL , null = True ,  related_name= "+" , editable=False)  # Va Chon 2ta field dar b 1 model fk mikhore hatman bayad az related_name estefadeh shavad
-    updated_at = models.DateTimeField(auto_now=True , editable=False)
+    updated_at = models.DateTimeField(auto_now=True , editable=False , null=True ,)
+    @property
+    def full_name(self) : 
+        return self.first_name + " " +self.last_name
+    
 
     class Meta : 
         abstract = True
@@ -115,9 +121,7 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     def __str__(self):
 
         return  self.last_name
-    @property
-    def full_name(self) : 
-        return self.first_name + " " +self.last_name
+    
 
     # Bayad Bebinam k ina chikar mikonn Hatman : !
     def has_perm(self, perm, obj=None): # todo?
