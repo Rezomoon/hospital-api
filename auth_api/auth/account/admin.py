@@ -103,6 +103,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
     def get_status(self, obj) : 
         return [status.name  for status in obj.status.all()]
     get_status.short_description = "Status"
+    
     list_filter = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
     search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("username","is_superuser")
