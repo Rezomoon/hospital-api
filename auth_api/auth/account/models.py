@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager 
-# from auth_api.libs.db.models import PersonBase
 from django.utils.translation import gettext_lazy as _
 import string
 import random
 from django.db import IntegrityError
 from django.conf import settings
 from auth_api.libs.constants.genders import GenderChoices
+from auth_api.apps.hospital.models import Hospital , Departement
 
 # Create your models here.
 
@@ -38,11 +38,14 @@ class PersonBase(models.Model) :
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =
+    # national_id
 
     status  = models.ForeignKey(Status ,  on_delete=models.DO_NOTHING,null=True,blank=True,related_name="+" )
    
 
-    # national_id 
+    hospital        = models.ForeignKey(Hospital , on_delete=models.PROTECT , null= True , blank=True)
+    departement     = models.ForeignKey(Departement , on_delete=models.PROTECT , null= True , blank=True)
+    
 
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
     created_at  = models.DateTimeField(auto_now_add=True , editable=False)
