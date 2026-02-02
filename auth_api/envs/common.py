@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 
     # apps : 
     "auth_api.auth.account" ,
-    "auth_api.apps.Person"
+    "auth_api.apps.Person" ,
+    "auth_api.apps.hospital"
 ]
 
 MIDDLEWARE = [
