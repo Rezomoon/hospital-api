@@ -34,17 +34,17 @@ class PersonBase(models.Model) :
     height          = models.PositiveIntegerField(null= True , blank= True)
     
     
-    person_code     = models.CharField(max_length=6 , unique=True , editable=False ) # todo? default=person_code()
+    person_code     = models.CharField(max_length=6 , unique=True ,null= True ,  editable=False ) # todo? default=person_code()
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =
     # national_id
 
-    status  = models.ForeignKey(Status ,  on_delete=models.DO_NOTHING,null=True,blank=True,related_name="+" )
+    status  = models.ForeignKey(Status ,  on_delete=models.PROTECT,null=True,blank=True,related_name="+" )
    
 
-    hospital        = models.ForeignKey(Hospital , on_delete=models.PROTECT , null= True , blank=True)
-    departement     = models.ForeignKey(Departement , on_delete=models.PROTECT , null= True , blank=True)
+    hospital        = models.ManyToManyField(Hospital ,  blank=True)
+    departement     = models.ManyToManyField(Departement  , blank=True)
     
 
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
