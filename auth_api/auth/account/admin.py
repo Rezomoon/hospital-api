@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import BaseCustomUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.admin import UserAdmin
-from .models import Role
+from .models import Role , Status
 # Register your models here. 
 
 
@@ -114,3 +114,8 @@ class BaseCustomUserAdminModel(UserAdmin) :
 class RoleModelAdmin(admin.ModelAdmin) :
     list_display = ["id" , "name", "description"]
 admin.site.register(Role, RoleModelAdmin)
+
+
+class StatusModelAdmin(admin.ModelAdmin) :
+    list_display = ["id" , "name", "description"]
+admin.site.register(Status , StatusModelAdmin)

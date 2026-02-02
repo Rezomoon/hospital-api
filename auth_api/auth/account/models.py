@@ -1,11 +1,54 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager 
-from auth_api.libs.db.models import PersonBase
+# from auth_api.libs.db.models import PersonBase
 from django.utils.translation import gettext_lazy as _
 import string
 import random
 from django.db import IntegrityError
+from django.conf import settings
+
 # Create your models here.
+
+
+class Role(models.Model) : 
+    name        = models.CharField(max_length=150 , unique=True)
+    description = models.TextField( blank=True)
+    def __str__(self):
+        return self.name
+    
+class Status(models.Model) :
+    name        = models.CharField(max_length=150 , null=True , blank=True)
+    description = models.TextField(null=True , blank=True)
+    def __str__(self):
+        return self.name
+class PersonBase(models.Model) :
+
+    
+    first_name  = models.CharField(max_length=150 , blank=True  )
+    last_name   = models.CharField(max_length=150 , blank=True  )
+    
+    date_of_birth   = models.DateField(null=True , blank= True)
+    weight          = models.PositiveIntegerField(null= True , blank= True)
+    height          = models.PositiveIntegerField(null= True , blank= True)
+    
+    
+    person_code     = models.CharField(max_length=6 , unique=True , editable=False ) # todo? default=person_code()
+    # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
+
+    # ImageField =
+
+    status  = models.ForeignKey(Status ,  on_delete=models.DO_NOTHING,null=True,blank=True,related_name="+" )
+   
+
+    # national_id 
+
+    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
+    created_at  = models.DateTimeField(auto_now_add=True , editable=False)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL , null = True ,  related_name= "+" , editable=False)  # Va Chon 2ta field dar b 1 model fk mikhore hatman bayad az related_name estefadeh shavad
+    updated_at = models.DateTimeField(auto_now=True , editable=False)
+
+    class Meta : 
+        abstract = True
 
 
 class CustomeUserManager(BaseUserManager) : 
@@ -54,7 +97,7 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     # fk default_snf or default hospitals
     # fk hospitals 
 
-    role    = models.ManyToManyField("Role" , blank=True , related_name=  "role")
+    role    = models.ManyToManyField(Role , blank=True , related_name=  "role")
     is_admin        = models.BooleanField(default=False) 
     is_staff        = models.BooleanField(default=False) # It Allows To Login To Django Admin(Even Can Login But is_superuser== False)=>Cant Do anything
     is_superuser    = models.BooleanField(default=False) # It Allow To Has permission(Cant log in to django admin if is_staff== False)
@@ -82,11 +125,3 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
 
     def has_module_perms(self, app_label): # todo?
         return self.is_superuser and self.is_staff
-
-
-
-class Role(models.Model) : 
-    name        = models.CharField(max_length=150 , unique=True)
-    description = models.TextField( blank=True)
-    def __str__(self):
-        return self.name
