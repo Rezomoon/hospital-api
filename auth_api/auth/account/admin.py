@@ -105,13 +105,23 @@ class BaseCustomUserAdminModel(UserAdmin) :
                     "person_code" ,
                     "status",
                     "get_role",
-                    "hospital" ,"departement" ,   ) # 
+                    "get_hospital" ,
+                    "get_departement" ,   ) # 
 
 
     def get_role(self , obj ) :
         return [role.name for role in obj.role.all()]
 
     get_role.short_description = "Role"
+
+    def get_hospital(self , obj) :
+        return [hospital.name for hospital in obj.hospital.all()]
+    get_hospital.short_description = "Hospital"
+
+    def get_departement(self , obj) : 
+        return [departement.name for departement in obj.departement.all()]
+    get_departement.short_description = "Departement"
+
     
     list_filter = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
     search_fields = ("username", "first_name", "last_name", "email")
