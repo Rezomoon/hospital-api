@@ -1,8 +1,8 @@
 from django.db import models
-
+from auth_api.libs.db.models import AuditModel
 # Create your models here.
 
-class Hospital(models.Model) : 
+class Hospital(AuditModel) : 
     name = models.CharField(max_length=150 ,)
     code = models.CharField(
         max_length=10 ,
@@ -21,7 +21,7 @@ class Hospital(models.Model) :
     def __str__(self):
         return self.name
 
-class Departement(models.Model) :
+class Departement(AuditModel) :
     hospital = models.ForeignKey(
         Hospital , 
         on_delete=models.PROTECT , 

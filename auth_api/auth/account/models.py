@@ -7,6 +7,7 @@ from django.db import IntegrityError
 from django.conf import settings
 from auth_api.libs.constants.genders import GenderChoices
 from auth_api.apps.hospital.models import Hospital , Departement
+from auth_api.libs.db.models import AuditModel
 
 # Create your models here.
 
@@ -22,7 +23,7 @@ class Status(models.Model) :
     description = models.TextField(null=True , blank=True)
     def __str__(self):
         return self.name
-class PersonBase(models.Model) :
+class PersonBase(AuditModel) :
 
     
     first_name  = models.CharField(max_length=150 , blank=True  )
@@ -34,7 +35,7 @@ class PersonBase(models.Model) :
     height          = models.PositiveIntegerField(null= True , blank= True)
     
     
-    person_code     = models.CharField(max_length=6 , unique=True ,null= True ,  editable=False ) # todo? default=person_code()
+    person_code     = models.CharField(max_length=6 , unique=True ,null= True ,  editable=False )
     # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
 
     # ImageField =
@@ -46,16 +47,10 @@ class PersonBase(models.Model) :
     hospital        = models.ManyToManyField(Hospital ,  blank=True)
     departement     = models.ManyToManyField(Departement  , blank=True)
     
-
-    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
-    created_at  = models.DateTimeField(auto_now_add=True , editable=False)
-    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL , null = True ,  related_name= "+" , editable=False)  # Va Chon 2ta field dar b 1 model fk mikhore hatman bayad az related_name estefadeh shavad
-    updated_at = models.DateTimeField(auto_now=True , editable=False , null=True ,)
     @property
     def full_name(self) : 
         return self.first_name + " " +self.last_name
     
-
     class Meta : 
         abstract = True
 

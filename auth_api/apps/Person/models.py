@@ -7,8 +7,8 @@ from auth_api.auth.account.models import PersonBase
 class Patient(PersonBase) : 
 
     is_active = models.BooleanField(default=True)
-    # medical_record_number = models.CharField(max_length=20 , unique=True , editable=False)
-    # departemant
+    
+    # medical_record_number = models.CharField(max_length=20 , unique=True , editable=False) todo!
     def __str__(self):
         return self.first_name + " " + self.last_name
     class Meta : 
