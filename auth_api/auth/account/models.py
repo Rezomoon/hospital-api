@@ -6,7 +6,6 @@ import random
 from django.db import IntegrityError
 from django.conf import settings
 from auth_api.libs.constants.genders import GenderChoices
-from auth_api.apps.hospital.models import Hospital , Departement
 from auth_api.libs.db.models import AuditModel
 
 # Create your models here.
@@ -25,10 +24,8 @@ class Status(models.Model) :
         return self.name
 class PersonBase(AuditModel) :
 
-    
     first_name  = models.CharField(max_length=150 , blank=True  )
-    last_name   = models.CharField(max_length=150 , blank=True  )
-    
+    last_name   = models.CharField(max_length=150 , blank=True  )  
     gender      = models.CharField(max_length=8 ,choices=GenderChoices.choices, default=GenderChoices.Male, )
     date_of_birth   = models.DateField(null=True , blank= True)
     weight          = models.PositiveIntegerField(null= True , blank= True)
@@ -42,10 +39,6 @@ class PersonBase(AuditModel) :
     # national_id
 
     status  = models.ForeignKey(Status ,  on_delete=models.PROTECT,null=True,blank=True,related_name="+" )
-   
-
-    hospital        = models.ManyToManyField(Hospital ,  blank=True)
-    departement     = models.ManyToManyField(Departement  , blank=True)
     
     @property
     def full_name(self) : 
@@ -99,13 +92,22 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     username    = models.CharField(max_length=100 , blank= True , null= True , unique= True)
 
     # fk default_snf or default hospitals
-    # fk hospitals 
+    
 
-    role    = models.ManyToManyField(Role , blank=True , related_name=  "role")
     is_admin        = models.BooleanField(default=False) 
     is_staff        = models.BooleanField(default=False) # It Allows To Login To Django Admin(Even Can Login But is_superuser== False)=>Cant Do anything
     is_superuser    = models.BooleanField(default=False) # It Allow To Has permission(Cant log in to django admin if is_staff== False)
     is_active       = models.BooleanField(default=True)
+
+    
+    hospital        = models.ManyToManyField("hospital.Hospital" ,
+                                            through = "hospital.UserHospitalMembership" ,
+                                            through_fields=("user", "hospital"),  # (source , target)
+                                            )
+    # Tip
+    # Chon k ma mikhayeem yek through-model besazim va oon through-model ma az AuditTable ers bari mikone va oon ham chon khodesh
+    # fk dare(created_by , updated_by) django nemifahme b kodom fk bayad point kone !Yani nimdone kodom field namayande rabeteh hastesh !
+    # Ba through_fields serahatan moshakhas mikonim k django ba kodom field relation ro ijad kone (Add through_fields: The order is (source_field, target_field))
 
     
     USERNAME_FIELD = "email" 
@@ -116,9 +118,10 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     class Meta :
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+        
     def __str__(self):
 
-        return  self.last_name
+        return  self.email
     
 
     # Bayad Bebinam k ina chikar mikonn Hatman : !
