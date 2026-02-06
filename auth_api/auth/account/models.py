@@ -22,6 +22,7 @@ class Status(models.Model) :
     description = models.TextField(null=True , blank=True)
     def __str__(self):
         return self.name
+    
 class PersonBase(AuditModel) :
 
     first_name  = models.CharField(max_length=150 , blank=True  )
@@ -110,7 +111,7 @@ class BaseCustomUser(AbstractBaseUser , PersonBase ) :
     # Ba through_fields serahatan moshakhas mikonim k django ba kodom field relation ro ijad kone (Add through_fields: The order is (source_field, target_field))
 
     
-    USERNAME_FIELD = "email" 
+    USERNAME_FIELD  = "email" 
     REQUIRED_FIELDS = ["username"]
 
     objects         = CustomeUserManager()
