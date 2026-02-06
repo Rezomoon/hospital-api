@@ -55,3 +55,19 @@ class UserHospitalMembership(AuditModel) :
     is_active   = models.BooleanField(default=True) 
 
     joined_at   = models.DateTimeField(auto_now_add=True , null=True)
+
+class PatientAdmission(AuditModel) : 
+    
+    patient         = models.ForeignKey("Person.Patient", on_delete=models.PROTECT , null=True)
+
+    hospital        = models.ForeignKey("Hospital" , on_delete=models.PROTECT , null=True) 
+
+    status          = models.ForeignKey("account.Status" , on_delete=models.PROTECT , null=True)
+
+    responsible_doctor = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.PROTECT , null= True)
+
+    admitted_at     = models.DateTimeField(auto_now_add=True , null=True , blank= True ) # Ehtemalan beshe az field created_at ham b jaye in estefadeh kard !
+
+    discharged_at   = models.DateTimeField(null=True)
+
+    # is_active = ??
