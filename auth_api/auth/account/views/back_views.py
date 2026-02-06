@@ -30,7 +30,7 @@ class UserRegistration(APIView) :
 class LoginAPI(APIView) : 
     # renderer_classes = [CustomRenderer]
     permission_classes = [AllowAny , ]
-    def post(sefl , request) : 
+    def post(self , request) : 
         data = request.data
         serializer = LoginSerailizer(data = data)
         serializer.is_valid(raise_exception=True)
