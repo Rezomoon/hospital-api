@@ -71,3 +71,41 @@ class PatientAdmission(AuditModel) :
     discharged_at   = models.DateTimeField(null=True)
 
     # is_active = ??
+
+class Visit(AuditModel) : 
+
+    doctor      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null = True)
+
+    patient     = models.ForeignKey("Person.Patient", on_delete=models.PROTECT, null = True)
+
+    hospital    = models.ForeignKey("Hospital" , on_delete=models.PROTECT , null=True)
+
+    departement = models.ForeignKey("Departement" , on_delete=models.PROTECT , null = True)
+
+    description = models.TextField()
+
+    drugs       = models.ForeignKey("Drugs" , on_delete=models.PROTECT)
+
+    visit_date    = models.DateTimeField( null = True) # Its Diffrent With created_at cause some Times should set the past date
+
+    class Meta : 
+        verbose_name = "Visit"
+        verbose_name_plural = "Visits"
+    
+    def __str__(self):
+        return f"{self.patient}"
+
+
+class Drugs(models.Model) :
+
+    name        = models.CharField(max_length=150 , null = True)
+
+    description = models.TextField()
+
+    is_active   = models.BooleanField(default=True)
+
+    class Meta : 
+        verbose_name = "Drug"
+        verbose_name_plural = "Drugs"
+    def __str__(self):
+        return self.name

@@ -1,6 +1,6 @@
 from django.db import models
-# from auth_api.libs.db.models import PersonBase
 from auth_api.auth.account.models import PersonBase
+
 # Create your models here.
 
 
