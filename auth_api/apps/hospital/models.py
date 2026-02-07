@@ -95,17 +95,3 @@ class Visit(AuditModel) :
     def __str__(self):
         return f"{self.patient}"
 
-
-class Drugs(models.Model) :
-
-    name        = models.CharField(max_length=150 , null = True)
-
-    description = models.TextField()
-
-    is_active   = models.BooleanField(default=True)
-
-    class Meta : 
-        verbose_name = "Drug"
-        verbose_name_plural = "Drugs"
-    def __str__(self):
-        return self.name
