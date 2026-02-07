@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Patient
+from .models import Patient , Visit
 from auth_api.auth.account.admin import BaseCustomUserAdminModel
 # Register your models here.
 
@@ -17,3 +17,7 @@ class PatientModelAdmin(admin.ModelAdmin) :
 
     get_hospital = BaseCustomUserAdminModel.get_hospital
     # get_departement = BaseCustomUserAdminModel.get_departement
+
+class VisitAdminModel(admin.ModelAdmin) : 
+    list_display    = [ "id", "doctor", "patient", "hospital", "departement", "description",  "visit_date"]
+admin.site.register(Visit , VisitAdminModel)
