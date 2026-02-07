@@ -115,9 +115,9 @@ class BaseCustomUserAdminModel(UserAdmin) :
                     "is_staff", "is_admin",
                     "person_code" ,
                     "status",
-                    # "get_role",
                     "get_hospital" ,
                     # "get_departement" ,
+                    # "get_role",
                           ) # 
 
 
@@ -127,7 +127,7 @@ class BaseCustomUserAdminModel(UserAdmin) :
     # get_role.short_description = "Role"
 
     def get_hospital(self , obj) :
-        return [hospital.name for hospital in obj.hospital.all()]
+        return [hospital.name for hospital in obj.hospital.all()] 
     get_hospital.short_description = "Hospital"
 
     # def get_departement(self , obj) : 

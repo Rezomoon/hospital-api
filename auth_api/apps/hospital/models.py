@@ -48,7 +48,7 @@ class UserHospitalMembership(AuditModel) :
 
     hospital    = models.ForeignKey("Hospital" , on_delete=models.CASCADE , null=True)
 
-    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True)
+    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True , blank = True)
 
     role        = models.ForeignKey("account.Role" , on_delete=models.CASCADE , null= True)
 
@@ -68,7 +68,7 @@ class PatientAdmission(AuditModel) :
 
     admitted_at     = models.DateTimeField(auto_now_add=True , null=True , blank= True ) # Ehtemalan beshe az field created_at ham b jaye in estefadeh kard !
 
-    discharged_at   = models.DateTimeField(null=True)
+    discharged_at   = models.DateTimeField(null=True, blank = True)
 
     # is_active = ??
 
