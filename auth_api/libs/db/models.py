@@ -1,29 +1,15 @@
 from django.db import models
 from django.conf import settings
 
-# Create Your Abstract Model : 
+# # Create Your Abstract Model : 
 
 
-class BasicUserModel(models.Model) :
+class AuditModel(models.Model) : 
 
-    
-    first_name  = models.CharField(max_length=150 , blank=True  )
-    last_name   = models.CharField(max_length=150 , blank=True  )
-    
-    date_of_birth   = models.DateField(null=True , blank= True)
-    weight          = models.PositiveIntegerField(null= True , blank= True)
-    height          = models.PositiveIntegerField(null= True , blank= True)
-    
-
-    person_code     = models.CharField(max_length=6) # todo?
-    # in yek code hastesh baraye ham mariz va ham users(code mariz) va code personeli
-
-    # ImageField =
-
-    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "created" , editable=False) 
-    created_at  = models.DateTimeField(auto_now_add=True , editable=False)
-    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL , null = True ,  related_name= "modified" , editable=False)  # Va Chon 2ta field dar b 1 model fk mikhore hatman bayad az related_name estefadeh shavad
-    updated_at = models.DateTimeField(auto_now=True , editable=False)
-
+    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.SET_NULL , null = True , related_name= "+" , editable=False) 
+    created_at  = models.DateTimeField(auto_now_add=True ,null=True , editable=False)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL , null = True ,  related_name= "+" , editable=False)  # Va Chon 2ta field dar b 1 model fk mikhore hatman bayad az related_name estefadeh shavad
+    updated_at = models.DateTimeField(auto_now=True , editable=False , null=True ,)
+    # auto_now => Har Dafe k yek instance save mishe va ya update mishe in ham hamon tarikh akhar ro zakhire mikone !
     class Meta : 
         abstract = True

@@ -2,7 +2,18 @@ from django.contrib import admin
 from .models import BaseCustomUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.admin import UserAdmin
+from .models import Role , Status
+from django.contrib.auth import get_user_model
 # Register your models here. 
+
+
+
+class CustomUserInLine(admin.TabularInline) : 
+    """
+    Cuase We Have manyTomany Field and through table we use this way
+    """
+    model   = get_user_model().hospital.through
+    fk_name = "user"
 
 
 @admin.register(BaseCustomUser)
@@ -50,7 +61,11 @@ class BaseCustomUserAdminModel(UserAdmin) :
                         "is_active" , 
                         "is_staff",
                         "is_superuser",
-                        "is_admin" ,)
+                        "is_admin" ,
+                        # "role" ,
+                        "status",
+                        # "departement",
+                        ) 
                         }
         ) ,
 
@@ -77,7 +92,11 @@ class BaseCustomUserAdminModel(UserAdmin) :
             "دسترسی ها و نقش ها" ,
          {
              "classes"          :  ["wide",],
-             "fields"           : (("is_admin", "is_staff", "is_superuser",),) ,
+             "fields"           : (("is_admin", "is_staff","is_superuser",),
+                                #    "role",
+                                   "status" ,
+                                #    "departement" ,
+                                    ) ,
              "description"      : "تنظیمات دسترسی ها و نقش های کاربر"
          }
          ),
@@ -91,12 +110,45 @@ class BaseCustomUserAdminModel(UserAdmin) :
          ),
     )
 
-    list_display = ("username", "email",  "full_name", "is_staff", "is_admin", )
-    list_filter = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
-    search_fields = ("username", "first_name", "last_name", "email")
-    ordering = ("username","is_superuser")
+    list_display = ("id", "username",
+                    "email",  "full_name",
+                    "is_staff", "is_admin",
+                    "person_code" ,
+                    "status",
+                    "get_hospital" ,
+                    # "get_departement" ,
+                    # "get_role",
+                          ) # 
+
+
+    # def get_role(self , obj ) :
+    #     return [role.name for role in obj.role.all()]
+
+    # get_role.short_description = "Role"
+
+    def get_hospital(self , obj) :
+        return [hospital.name for hospital in obj.hospital.all()] 
+    get_hospital.short_description = "Hospital"
+
+    # def get_departement(self , obj) : 
+    #     return [departement.name for departement in obj.departement.all()]
+    # get_departement.short_description = "Departement"
+
+    
+    list_filter     = ("is_staff", "is_superuser", "is_active", ) #"groups" todo
+    search_fields   = ("username", "first_name", "last_name", "email")
+    ordering        = ("username","is_superuser")
+    inlines         = [CustomUserInLine]
     filter_horizontal = (
-       # "groups", todo
-       # "user_permissions", todo
+    #    "groups",      #todo
+    # "user_permissions", todo
     )
    
+class RoleModelAdmin(admin.ModelAdmin) :
+    list_display = ["id" , "name", "description"]
+admin.site.register(Role, RoleModelAdmin)
+
+
+class StatusModelAdmin(admin.ModelAdmin) :
+    list_display = ["id" , "name", "description"]
+admin.site.register(Status , StatusModelAdmin)
