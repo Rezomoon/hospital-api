@@ -29,7 +29,8 @@ class BasicUserSerailizer(serializers.ModelSerializer) :
     # hospital    = HospitalSerializers(many = True, read_only = True)
     class Meta : 
         model = get_user_model()
-        fields = ["first_name" ,
+        fields = ["id" ,
+                  "first_name" ,
                   "last_name",
                   "is_admin",
                   "is_staff",
