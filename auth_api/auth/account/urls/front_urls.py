@@ -4,6 +4,7 @@ from auth_api.auth.account.views.front_views import (UserProfile , UserListAPIVi
 # Create Your URLS
 urlpatterns = [
     path("profile/" , UserProfile.as_view() ) ,
-    path("user-list/" , UserListAPIView.as_view()) ,
+
+    path("user-list/<int:hospital_id>/" , UserListAPIView.as_view()) ,
     
 ]

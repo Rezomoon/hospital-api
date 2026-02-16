@@ -73,4 +73,3 @@ class PatientAdmission(AuditModel) :
     # is_active = ??
 
 
-
