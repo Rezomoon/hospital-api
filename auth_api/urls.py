@@ -22,9 +22,12 @@ back_urls_account = [
 front_urls_account = [
     path("account/" , include("auth_api.auth.account.urls.front_urls")) , 
 ]
-front_urls_hospital = [
-    path("hospital/" , include("auth_api.apps.hospital.urls.front_urls"))
+hospital_urls = [
+    path("hospital/" , include("auth_api.apps.hospital.urls.hospital_urls"))
+]
+departement_urls = [
+    path("departement/" , include("auth_api.apps.hospital.urls.departement_urls")) ,
 ]
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + back_urls_account + front_urls_account + front_urls_hospital
+] + back_urls_account + front_urls_account + hospital_urls + departement_urls
