@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from auth_api.apps.hospital.models import (UserHospitalMembership ,Departement)
+from auth_api.apps.hospital.models import (UserHospitalMembership ,
+                                           Departement,
+                                           Hospital
+                                           )
+from .base_serializers import DepartementSerializers
 # from auth_api.auth.account.serializers.user_serializers import BasicUserDataSerializers
 
 # Create Your Custom Serializer : 
@@ -58,3 +62,8 @@ class HospitalMemberShipsCustomSerializer(serializers.ModelSerializer) :
             "role" ,
             "is_active" ,
         ]
+class UserHospitalDetailsSerializer(serializers.ModelSerializer) :
+    departements = DepartementSerializers(read_only = True , many = True)
+    class Meta : 
+        model = Hospital
+        fields = "__all__"
