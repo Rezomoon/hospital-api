@@ -9,7 +9,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from auth_api.auth.account.queries.admin_queries import get_user
 from auth_api.auth.account.models import BaseCustomUser
 from auth_api.utils.utils import util
-from auth_api.apps.hospital.serializer.base_serializers import HospitalSerializers
+# from auth_api.apps.hospital.serializer.base_serializers import HospitalSerializers
 from auth_api.apps.hospital.serializer.custom_serializer import UserHospitalMemberShipCustomSerializer
 # Create Your Serailizers : 
 
@@ -40,7 +40,16 @@ class BasicUserSerailizer(serializers.ModelSerializer) :
                   "status" ,
                   "hospital",
                   ]
+class BasicUserDataSerializers(serializers.ModelSerializer) : 
+    class Meta : 
+        model = get_user_model()
+        fields = [
+            "id" ,
+            "first_name" ,
+            "last_name",
+            "email" , 
 
+        ]
 class AdminRegistrationSerializer(serializers.ModelSerializer) : 
     password2 = serializers.CharField(style = {"input_type" : "password"} , write_only = True)
     class Meta : 
