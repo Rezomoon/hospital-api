@@ -5,19 +5,19 @@ from .models import Hospital , Departement, UserHospitalMembership
 
 
 class HospitalAdminModel(admin.ModelAdmin) : 
-    list_display    = ["name", "code", "is_active"]
+    list_display    = ["id","name", "code", "is_active"]
 admin.site.register(Hospital , HospitalAdminModel)
 
 
 class DepartementAdminModel(admin.ModelAdmin) : 
-    list_display    = ["name", "code", "is_active", "hospital"]
+    list_display    = ["id","name", "code", "is_active", "hospital"]
 
 admin.site.register(Departement ,DepartementAdminModel )
 
 
 
 class UserHospitalMembershipAdminModel(admin.ModelAdmin) : 
-    list_display = ["user", "hospital", "departement", "role", "is_active", "joined_at"]
+    list_display = ["id","user", "hospital", "departement", "role", "is_active", "joined_at"]
 admin.site.register(UserHospitalMembership , UserHospitalMembershipAdminModel)
 
 
