@@ -12,3 +12,25 @@ class util :
 
         )
         email.send()
+
+def check_roles(user_role) :
+    """
+    Docstring for check_roles
+    
+    :param user_role : get requset user role
+    """
+
+    SUPER_ADMIN_ALLOWED_LIST = ["Admin","Doctor", "Nurse",]
+    ADMIN_ALLOWED_LIST = ["Doctor", "Nurse",]
+    DOCTOR_ALLOWED_LIST = ["Nurse",]
+    ALLOWED_LIST = []
+    if "SuperAdmin" in user_role :
+        ALLOWED_LIST = SUPER_ADMIN_ALLOWED_LIST
+    elif "Admin" in user_role :
+        ALLOWED_LIST = ADMIN_ALLOWED_LIST
+    elif "Doctor" in user_role :
+        ALLOWED_LIST = DOCTOR_ALLOWED_LIST
+    else :
+        ALLOWED_LIST = []
+    return ALLOWED_LIST
+    
