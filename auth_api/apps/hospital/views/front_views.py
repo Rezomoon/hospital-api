@@ -10,7 +10,9 @@ from auth_api.apps.hospital.serializer.base_serializers import (UserHospitalMemb
                                                                 )
 from auth_api.apps.hospital.serializer.custom_serializer import (
                                                                 UserHospitalMemberShipCustomSerializer ,
-                                                                HospitalMemberShipsCustomSerializer)
+                                                                HospitalMemberShipsCustomSerializer,
+                                                                UserHospitalDetailsSerializer ,
+                                                                )
 from auth_api.auth.account.permissions.basic_permissions import (
                                                                 # IsAdminOrSuperUser , 
                                                                 NotNurse)
@@ -38,8 +40,17 @@ class UserHospitals(APIView) :
         }
         return Response(data , status = status.HTTP_200_OK)
     
-class UserDepartement(APIView) : 
-    
-    def get(self,request) :
+class UserHospitalDetails(APIView) : 
 
-        pass
+    def get(self,request, hospital_id) :
+
+        user    = request.user
+        query   = get_hospital_by_id(hospital_id)
+        
+        serializer = UserHospitalDetailsSerializer(query )
+
+        data = {
+            "data" : serializer.data
+        }
+
+        return Response(data ,status=status.HTTP_200_OK)
