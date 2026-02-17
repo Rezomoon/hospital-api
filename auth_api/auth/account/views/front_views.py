@@ -54,9 +54,9 @@ class UserListAPIView(APIView) :
 class UserDetailsByIdAPIView(APIView) :
     permission_classes = [SameHospital]
     def get(self ,request , user_id) :
-        query = get_user(user_id)
-        self.check_object_permissions(request , query)
-        serializer = BasicUserSerailizer(query )
+        users_query = get_user(user_id)
+        self.check_object_permissions(request , users_query)
+        serializer = BasicUserSerailizer(users_query )
         return Response(serializer.data)
     
     def put(self , request , user_id) : 
@@ -71,4 +71,5 @@ class UserDetailsByIdAPIView(APIView) :
         serializer.save()   
         serializer = ProfileSerializers(user)
         return Response(serializer.data , status=status.HTTP_202_ACCEPTED)
+
 
