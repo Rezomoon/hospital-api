@@ -3,12 +3,12 @@ from auth_api.auth.account.models import (Role)
 from rest_framework.response import Response
 from rest_framework import status 
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 # Create Your Queries : 
 
 def get_user(id) : 
     try :
         user = get_user_model().objects.get(id = id)
-        print(type(user))
         return user
     except get_user_model().DoesNotExist :
         return Response({"errors" : "USER DOESE NOT EXIST!"} , status=status.HTTP_404_NOT_FOUND)
@@ -17,6 +17,12 @@ def get_user(id) :
 def get_user_hospitals_id(user , is_active = True) : 
 
     query = user.userHospitals.filter(is_active = is_active).values_list("hospital_id" , flat = True)
+
+    return query
+
+def get_role_hospitals_id(user , role, is_active = True) : 
+
+    query = user.userHospitals.filter(is_active = is_active , role__name = role)
 
     return query
 
@@ -60,10 +66,12 @@ def get_user_list_by_hospital_id(user,hospital_id,is_active = True,) :
     
     if "SuperAdmin" in user_role :
         ALLOWED_LIST = SUPER_ADMIN_ALLOWED_LIST
-    if "Admin" in user_role :
+    elif "Admin" in user_role :
         ALLOWED_LIST = ADMIN_ALLOWED_LIST
-    if "Doctor" in user_role :
+    elif "Doctor" in user_role :
         ALLOWED_LIST = DOCTOR_ALLOWED_LIST
+    else :
+        ALLOWED_LIST = []
 
     query = get_user_model().objects.filter(
         Q(userHospitals__hospital_id = hospital_id) 
