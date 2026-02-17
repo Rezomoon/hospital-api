@@ -59,3 +59,16 @@ class UserDetailsByIdAPIView(APIView) :
         serializer = BasicUserSerailizer(query )
         return Response(serializer.data)
     
+    def put(self , request , user_id) : 
+        user = get_user(user_id)
+        data        = request.data
+        if data.get("password") :
+            serializer  = UpdatePassworddSerializer(user , data, partial = True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        serializer  = UpdateUserSerializer(user , data ,partial = True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()   
+        serializer = ProfileSerializers(user)
+        return Response(serializer.data , status=status.HTTP_202_ACCEPTED)
+
