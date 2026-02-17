@@ -2,9 +2,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from auth_api.auth.account.serializers.user_serializers import (AdminRegistrationSerializer , LoginSerailizer ,
-                                                                BasicUserSerailizer, SentResetPasswordEmailSerializer,
-                                                                UserPasswordResetSerializer, )
+from auth_api.auth.account.serializers.user_serializers import (AdminRegistrationSerializer ,
+                                                                LoginSerailizer ,
+                                                                BasicUserSerailizer,
+                                                                SentResetPasswordEmailSerializer,
+                                                                UserPasswordResetSerializer, 
+                                                                AddUserSerializer ,
+                                                                )
 
 from django.contrib.auth import authenticate
 from auth_api.auth.account.renderers import CustomRenderer
@@ -88,3 +92,13 @@ def get_tokens_for_user(user) :
         'access'    : str(refresh.access_token) ,
     }
 
+class AddUser(APIView) : 
+    def post(self , request) : 
+        data = request.data
+        serializer = AddUserSerializer(data = data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data = {
+            "data" : serializer.data
+        }
+        return Response(data , status=status.HTTP_201_CREATED)
