@@ -2,7 +2,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView 
 from auth_api.auth.account.serializers.user_serializers import (ProfileSerializers , UpdatePassworddSerializer, UpdateUserSerializer ,BasicUserSerailizer)
 from rest_framework import status
-from auth_api.auth.account.queries.admin_queries import (get_user_hospitals_id ,get_user_list_by_hospital_id)
+from auth_api.auth.account.queries.admin_queries import (get_user_hospitals_id ,get_user_list_by_hospital_id,
+                                                         get_user , get_role_hospitals_id)
+from auth_api.auth.account.permissions.basic_permissions import NotNurse , SameHospital
+from django.shortcuts import get_object_or_404
 # Create Your Views : 
 
 
@@ -31,6 +34,7 @@ class UserProfile(APIView) :
 
 
 class UserListAPIView(APIView) : 
+    permission_classes = [NotNurse , ]
     def get(self ,request, hospital_id) :
 
         """
@@ -40,10 +44,18 @@ class UserListAPIView(APIView) :
         """
 
         user= request.user
-        query = get_user_hospitals_id(user)
-        query2 = get_user_list_by_hospital_id(user , hospital_id)
-        serializer = BasicUserSerailizer(query2 ,many = True)
+        query = get_user_list_by_hospital_id(user , hospital_id)
+        serializer = BasicUserSerailizer(query ,many = True)
         data = {
             "data" : serializer.data
         }
         return Response(data=data, status=status.HTTP_200_OK)
+
+class UserDetailsByIdAPIView(APIView) :
+    permission_classes = [SameHospital]
+    def get(self ,request , user_id) :
+        query = get_user(user_id)
+        self.check_object_permissions(request , query)
+        serializer = BasicUserSerailizer(query )
+        return Response(serializer.data)
+    
