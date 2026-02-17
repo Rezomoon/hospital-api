@@ -15,9 +15,10 @@ from auth_api.apps.hospital.serializer.custom_serializer import (
                                                                 )
 from auth_api.auth.account.permissions.basic_permissions import (
                                                                 # IsAdminOrSuperUser , 
-                                                                NotNurse)
+                                                                NotNurse ,
+                                                                HasThisHospital)
 # Create your views here.
-class HospitalMemberShipsAPIView(APIView) : 
+class HospitalMemberShipsAPIView(APIView) :
 
     permission_classes = [NotNurse]
 
@@ -40,13 +41,13 @@ class UserHospitals(APIView) :
         }
         return Response(data , status = status.HTTP_200_OK)
     
-class UserHospitalDetails(APIView) : 
-
+class UserHospitalDetails(APIView) :
+    permission_classes = [HasThisHospital]
     def get(self,request, hospital_id) :
-
-        user    = request.user
         query   = get_hospital_by_id(hospital_id)
-        
+
+        self.check_object_permissions(request , query )
+
         serializer = UserHospitalDetailsSerializer(query )
 
         data = {

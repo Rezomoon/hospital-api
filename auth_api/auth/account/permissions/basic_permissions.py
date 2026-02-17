@@ -20,6 +20,14 @@ class SameHospital(permissions.BasePermission) :
             
         return False
 
+class HasThisHospital(permissions.BasePermission) :
+     def has_object_permission(self, request, view, obj):
+        
+        if obj.id in request.user.userHospitals.filter(is_active = True).values_list("hospital_id", flat = True):
+            return True
+        else : 
+               return False
+        
 class IsAdminOrSuperUser(permissions.BasePermission) :
      """
 
