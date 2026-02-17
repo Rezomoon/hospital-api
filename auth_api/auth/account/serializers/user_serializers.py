@@ -14,6 +14,12 @@ from auth_api.apps.hospital.serializer.custom_serializer import UserHospitalMemb
 # Create Your Serailizers : 
 
 class ProfileSerializers(serializers.ModelSerializer) : 
+    """
+    Docstring for ProfileSerializers
+    
+    : Basic Serializer
+    
+    """
     class Meta : 
         model  = get_user_model()
         fields = "__all__"
@@ -50,6 +56,10 @@ class BasicUserDataSerializers(serializers.ModelSerializer) :
             "email" , 
 
         ]
+class UpdateUserSerializer(serializers.ModelSerializer) : 
+    class Meta : 
+        model   = get_user_model()
+        fields  = ["email", "username", "first_name", "last_name",]
 class AdminRegistrationSerializer(serializers.ModelSerializer) : 
     password2 = serializers.CharField(style = {"input_type" : "password"} , write_only = True)
     class Meta : 
@@ -68,6 +78,10 @@ class AdminRegistrationSerializer(serializers.ModelSerializer) :
         return attrs
     def create(self, validated_data) :
         return get_user_model().objects.create_admin(**validated_data)
+    
+class AddUserSerializer(AdminRegistrationSerializer) : 
+    def create(self, validated_data):
+        return get_user_model().objects.create_user(**validated_data)
     
 
 class UpdatePassworddSerializer(serializers.ModelSerializer) :
@@ -88,10 +102,7 @@ class UpdatePassworddSerializer(serializers.ModelSerializer) :
         instance.set_password = validated_data["password"]
         instance.save()
         return instance
-class UpdateUserSerializer(serializers.ModelSerializer) : 
-    class Meta : 
-        model   = get_user_model()
-        fields  = ["email", "username", "first_name", "last_name",]
+
     
 class LoginSerailizer(serializers.ModelSerializer) :
     email       = serializers.EmailField(max_length = 150 ,)
