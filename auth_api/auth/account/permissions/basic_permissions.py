@@ -19,3 +19,17 @@ class SameHospital(permissions.BasePermission) :
                 return bool(q in hospitals_id )
             
         return False
+
+class IsAdminOrSuperUser(permissions.BasePermission) :
+     """
+
+     Docstring for IsAdminOrSuperUser : 
+        It Check Permissions With Flags Like
+            is_admin , is_staff, is_superuser .
+
+     """
+     def has_permission(self, request, view):
+          
+          user = request.user # It mean The User Has Login !
+
+          return bool(user and user.is_staff or user.is_superuser or user.is_admin )
