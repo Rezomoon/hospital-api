@@ -9,18 +9,57 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from auth_api.auth.account.queries.admin_queries import get_user
 from auth_api.auth.account.models import BaseCustomUser
 from auth_api.utils.utils import util
+# from auth_api.apps.hospital.serializer.base_serializers import HospitalSerializers
+from auth_api.apps.hospital.serializer.custom_serializer import UserHospitalMemberShipCustomSerializer
 # Create Your Serailizers : 
 
 class ProfileSerializers(serializers.ModelSerializer) : 
+    """
+    Docstring for ProfileSerializers
+    
+    : Basic Serializer
+    
+    """
     class Meta : 
         model  = get_user_model()
         fields = "__all__"
 
 class BasicUserSerailizer(serializers.ModelSerializer) : 
+    hospital = UserHospitalMemberShipCustomSerializer(
+        many = True ,
+        source = "userHospitals" ,
+        read_only = True,
+        )
+
+    status      = serializers.CharField(source = 'status.name' , read_only = True)
+    # hospital    = HospitalSerializers(many = True, read_only = True)
     class Meta : 
         model = get_user_model()
-        fields = ["first_name" , "last_name", "is_admin", "is_staff", "is_superuser", "person_code", "last_login"]
+        fields = ["id" ,
+                  "first_name" ,
+                  "last_name",
+                  "is_admin",
+                  "is_staff",
+                  "is_superuser",
+                  "person_code",
+                  "last_login",
+                  "status" ,
+                  "hospital",
+                  ]
+class BasicUserDataSerializers(serializers.ModelSerializer) : 
+    class Meta : 
+        model = get_user_model()
+        fields = [
+            "id" ,
+            "first_name" ,
+            "last_name",
+            "email" , 
 
+        ]
+class UpdateUserSerializer(serializers.ModelSerializer) : 
+    class Meta : 
+        model   = get_user_model()
+        fields  = ["email", "username", "first_name", "last_name",]
 class AdminRegistrationSerializer(serializers.ModelSerializer) : 
     password2 = serializers.CharField(style = {"input_type" : "password"} , write_only = True)
     class Meta : 
@@ -39,6 +78,10 @@ class AdminRegistrationSerializer(serializers.ModelSerializer) :
         return attrs
     def create(self, validated_data) :
         return get_user_model().objects.create_admin(**validated_data)
+    
+class AddUserSerializer(AdminRegistrationSerializer) : 
+    def create(self, validated_data):
+        return get_user_model().objects.create_user(**validated_data)
     
 
 class UpdatePassworddSerializer(serializers.ModelSerializer) :
@@ -59,10 +102,7 @@ class UpdatePassworddSerializer(serializers.ModelSerializer) :
         instance.set_password = validated_data["password"]
         instance.save()
         return instance
-class UpdateUserSerializer(serializers.ModelSerializer) : 
-    class Meta : 
-        model   = get_user_model()
-        fields  = ["email", "username", "first_name", "last_name",]
+
     
 class LoginSerailizer(serializers.ModelSerializer) :
     email       = serializers.EmailField(max_length = 150 ,)

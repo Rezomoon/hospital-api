@@ -17,11 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 back_urls_account = [
-    path("account/" , include("auth_api.auth.account.urls.back_urls")) , 
+    path("auth/" , include("auth_api.auth.account.urls.back_urls")) , 
 ]
 front_urls_account = [
     path("account/" , include("auth_api.auth.account.urls.front_urls")) , 
 ]
+hospital_urls = [
+    path("hospital/" , include("auth_api.apps.hospital.urls.hospital_urls"))
+]
+departement_urls = [
+    path("departement/" , include("auth_api.apps.hospital.urls.departement_urls")) ,
+]
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + back_urls_account + front_urls_account
+] + back_urls_account + front_urls_account + hospital_urls + departement_urls

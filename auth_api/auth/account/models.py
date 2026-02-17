@@ -80,6 +80,20 @@ class CustomeUserManager(BaseUserManager) :
     def create_admin(self, email, username, password = None, password2 = None,**extra_fields) :
         extra_fields.setdefault("is_admin" , True)
         return self._create_user(username=username , email=email, password=password, **extra_fields)
+    
+
+    def create_user(self,email,username,password = None , password2 = None, **extera_fields) :
+        """
+        Docstring for create_user
+        
+        :param email: Get Email Address
+        :param username: Get UserName
+        :param password: Get Password
+        :param password2: Get password2 For Checking the passwords
+        :param extera_fields: Description
+        """
+        return self._create_user(username=username, email=email, password=password , )    
+    
     def _generate_unique_person_code (self,) : 
         while True : 
             code = "".join(random.choices(string.digits, k =6)) 

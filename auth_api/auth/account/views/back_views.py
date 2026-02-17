@@ -2,15 +2,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from auth_api.auth.account.serializers.user_serializers import (AdminRegistrationSerializer , LoginSerailizer ,
-                                                                BasicUserSerailizer, SentResetPasswordEmailSerializer,
-                                                                UserPasswordResetSerializer, )
-
+from auth_api.auth.account.serializers.user_serializers import (AdminRegistrationSerializer ,
+                                                                LoginSerailizer ,
+                                                                BasicUserSerailizer,
+                                                                SentResetPasswordEmailSerializer,
+                                                                UserPasswordResetSerializer, 
+                                                                AddUserSerializer ,
+                                                                )
+from auth_api.apps.hospital.serializer.base_serializers import UserHospitalMembershipSerializers
+from auth_api.auth.account.queries.admin_queries import get_user_by_email
 from django.contrib.auth import authenticate
 from auth_api.auth.account.renderers import CustomRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated , AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken , AccessToken
+from rest_framework.permissions import  AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken 
 
 # Create Your View APIs : 
 
@@ -88,3 +93,30 @@ def get_tokens_for_user(user) :
         'access'    : str(refresh.access_token) ,
     }
 
+class AddUser(APIView) : 
+    def post(self , request) : 
+
+        data = request.data
+        user_serializer = AddUserSerializer(data = data)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+
+        role = request.data.get("role")
+        hospital = request.data.get("hospital")
+        user = get_user_by_email(request.data.get("email"))
+        member_serializer = UserHospitalMembershipSerializers(
+            data = {
+                "role" :role , 
+                "hospital" : hospital ,
+                "user" : user.id   ,
+                
+            }
+        )
+        member_serializer.is_valid(raise_exception=True)
+        member_serializer.save()
+
+        data = {
+            "data" : user_serializer.data , 
+            "member_data" : member_serializer.data ,
+        }
+        return Response(data , status=status.HTTP_201_CREATED)

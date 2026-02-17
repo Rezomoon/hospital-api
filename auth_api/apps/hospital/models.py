@@ -44,13 +44,13 @@ class Departement(AuditModel) :
 
 class UserHospitalMembership(AuditModel) : 
 
-    user        = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE , null= True)
+    user        = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE , null= True, related_name="userHospitals")
 
     hospital    = models.ForeignKey("Hospital" , on_delete=models.CASCADE , null=True)
 
-    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True , blank = True)
+    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True , blank = True ,related_name="departements")
 
-    role        = models.ForeignKey("account.Role" , on_delete=models.CASCADE , null= True)
+    role        = models.ForeignKey("account.Role" , on_delete=models.CASCADE , null= True, related_name="roles")
 
     is_active   = models.BooleanField(default=True) 
 
@@ -71,6 +71,5 @@ class PatientAdmission(AuditModel) :
     discharged_at   = models.DateTimeField(null=True, blank = True)
 
     # is_active = ??
-
 
 

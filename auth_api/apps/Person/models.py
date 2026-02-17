@@ -14,6 +14,12 @@ class Patient(PersonBase) :
                                         through_fields = ("patient" , "hospital")) # (source , target)
     
     # medical_record_number = models.CharField(max_length=20 , unique=True , editable=False) todo!
+
+    
+    # def get_absolute_url(self): # ToDo !?
+    #     from django.urls import reverse
+    #     return reverse("model_detail", kwargs={"pk": self.pk})
+    
     def __str__(self):
         return self.first_name + " " + self.last_name
     class Meta : 
