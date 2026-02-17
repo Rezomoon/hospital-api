@@ -48,7 +48,7 @@ class UserHospitalMembership(AuditModel) :
 
     hospital    = models.ForeignKey("Hospital" , on_delete=models.CASCADE , null=True)
 
-    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True , blank = True ,)
+    departement = models.ForeignKey("Departement", on_delete=models.CASCADE , null=True , blank = True ,related_name="departements")
 
     role        = models.ForeignKey("account.Role" , on_delete=models.CASCADE , null= True, related_name="roles")
 
