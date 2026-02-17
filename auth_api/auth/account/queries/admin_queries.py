@@ -17,6 +17,12 @@ def get_user(id) :
         return user
     except get_user_model().DoesNotExist :
         return Response({"errors" : "USER DOESE NOT EXIST!"} , status=status.HTTP_404_NOT_FOUND)
+def get_user_by_email(email) :
+    try :
+        user = get_user_model().objects.get(email = email)
+        return user
+    except get_user_model().DoesNotExist :
+        return Response({"errors" : "USER DOESE NOT EXIST!"} , status=status.HTTP_404_NOT_FOUND)
     
 
 def get_user_hospitals_id(user , is_active = True) : 
