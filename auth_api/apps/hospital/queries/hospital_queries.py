@@ -9,11 +9,11 @@ from rest_framework.response import Response
 from rest_framework import status 
 from django.db.models import Q
 from auth_api.utils.utils import check_roles
-from auth_api.auth.account.queries.admin_queries import user_role_in_hospital
+from auth_api.auth.account.queries.admin_queries import (user_role_in_hospital , get_user_hospitals_id)
 
 # Create Your Hospital Apps Queries : 
 
-def get_hospital_by_id(hospital_id) : 
+def get_hospital_by_id(hospital_id ,) : 
     """
     Docstring for get_hospital_by_id
     
@@ -22,10 +22,20 @@ def get_hospital_by_id(hospital_id) :
     """
 
     try : 
-        query = Hospital.objects.get(id = hospital_id)
+        query = Hospital.objects.get(id = hospital_id) 
         return query
     except : 
         return Response({"errors" : "USER DOESE NOT EXIST!"} , status=status.HTTP_404_NOT_FOUND)
+
+def user_hospitals(user) :
+
+    hospitals_id = get_user_hospitals_id(user)
+
+    query = Hospital.objects.filter(id__in = hospitals_id)
+    
+    return query
+    
+    
 
 def get_UserHospitalMembership_by_hospital_id(user , hospital_id, is_active = True) :
     """
