@@ -2,11 +2,15 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from auth_api.apps.hospital.queries.hospital_queries import (get_hospital_by_id , 
+from auth_api.apps.hospital.queries.hospital_queries import (
+                                                            get_hospital_by_id , 
                                                             get_UserHospitalMembership_by_hospital_id,
-                                                            user_hospitals ,)
+                                                            user_hospitals ,
+                                                            )
+
 from auth_api.apps.hospital.serializer.base_serializers import (UserHospitalMembershipSerializers ,
-                                                                HospitalSerializers
+                                                                HospitalSerializers ,
+                                                                DepartementSerializers
                                                                 )
 from auth_api.apps.hospital.serializer.custom_serializer import (
                                                                 UserHospitalMemberShipCustomSerializer ,
@@ -55,3 +59,5 @@ class UserHospitalDetails(APIView) :
         }
 
         return Response(data ,status=status.HTTP_200_OK)
+
+        pass
