@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from auth_api.apps.hospital.models import (UserHospitalMembership ,Departement)
-from .base_serializers import DepartementSerializers
+# from auth_api.auth.account.serializers.user_serializers import BasicUserDataSerializers
 
 # Create Your Custom Serializer : 
 
@@ -35,3 +35,26 @@ class UserHospitalMemberShipCustomSerializer(serializers.ModelSerializer) :
                     "role_name" ,
                     
                     )
+class HospitalMemberShipsCustomSerializer(serializers.ModelSerializer) : 
+    # ! Should Check With Ai Cause When I want to import :
+    # from auth_api.auth.account.serializers.user_serializers import BasicUserDataSerializers
+    # ! it has Error So I Do It Like This :
+
+    user_id     = serializers.IntegerField(source = "user.id" , read_only = True)
+    status      = serializers.CharField(source = "user.status" , read_only = True)
+    email       = serializers.EmailField(source = "user.email" , read_only = True)
+    person_code = serializers.CharField(source = "user.person_code" , read_only = True)
+    full_name   = serializers.CharField(source = "user.full_name" , read_only = True)
+    role        = serializers.CharField(source = "role.name" , read_only = True)
+    class Meta : 
+        model = UserHospitalMembership 
+        fields = [
+            "id", 
+            "user_id" ,
+            "status" ,
+            "email" ,
+            "person_code" ,
+            "full_name" ,
+            "role" ,
+            "is_active" ,
+        ]
