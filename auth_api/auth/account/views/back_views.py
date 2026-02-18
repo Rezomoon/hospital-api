@@ -16,6 +16,7 @@ from auth_api.auth.account.renderers import CustomRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import  AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken 
+from auth_api.auth.account.permissions.basic_permissions import CheckWithUserHospital
 
 # Create Your View APIs : 
 
@@ -94,22 +95,27 @@ def get_tokens_for_user(user) :
     }
 
 class AddUser(APIView) : 
+    permission_classes =[CheckWithUserHospital]
     def post(self , request) : 
+        role = request.data.get("role")
+        hospital = request.data.get("hospital")
+        
+
+        self.check_object_permissions(request , hospital)
 
         data = request.data
         user_serializer = AddUserSerializer(data = data)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
-
-        role = request.data.get("role")
-        hospital = request.data.get("hospital")
         user = get_user_by_email(request.data.get("email"))
+
+        
+        
         member_serializer = UserHospitalMembershipSerializers(
             data = {
                 "role" :role , 
                 "hospital" : hospital ,
                 "user" : user.id   ,
-                
             }
         )
         member_serializer.is_valid(raise_exception=True)
