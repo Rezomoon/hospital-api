@@ -37,7 +37,6 @@ def get_user_hospitals_id(user , is_active = True) :
     """
 
     query = user.userHospitals.filter(is_active = is_active).values_list("hospital_id" , flat = True)
-
     return query
 
 def get_role_hospitals_id(user , role, is_active = True) : 
