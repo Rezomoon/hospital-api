@@ -41,3 +41,15 @@ class IsAdminOrSuperUser(permissions.BasePermission) :
           user = request.user # It mean The User Has Login !
 
           return bool(user and user.is_staff or user.is_superuser or user.is_admin )
+     
+class CheckWithUserHospital(permissions.BasePermission) :
+
+    def has_object_permission(self, request, view, obj):
+         
+        user_hospitals_id = get_user_hospitals_id(request.user)
+        if int(obj) in user_hospitals_id :
+             return True
+        else : 
+             return False
+
+        return super().has_permission(request, view)
